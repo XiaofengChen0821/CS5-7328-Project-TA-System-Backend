@@ -37,7 +37,7 @@ export const getAllCoursesWithoutDetail = async (
 
     // Map into courseCode - title format
     const formattedCourses = courses.map((course: any) => ({
-      courseId: course.id,
+      courseID: course.id,
       courseCode: course.courseCode,
       title: course.title
     }));

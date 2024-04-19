@@ -100,7 +100,7 @@ export const viewCurrent = async (studentId: string) => {
                 facultyId: true,
                 title: true,
                 description: true,
-                courseId: true, 
+                courseId: true,
                 TaskId: true,
                 completed: true,
                 course: {
