@@ -3,11 +3,10 @@ import * as MessageService from './message.service';
 import { Request, Response, NextFunction } from 'express';
 
 /**
- * Handles GET requests to retrieve messages by application ID.
- * 
- * @param {Request} req - The request object, expects an application ID in the URL parameter.
- * @param {Response} res - The response object used to send back the fetched data.
- * @param {NextFunction} next - The next middleware function in the stack.
+ * Get messages by application id
+ * @param req 
+ * @param res 
+ * @param next 
  */
 export const getMessagesByApplication = async (
   req: Request,
@@ -15,50 +14,43 @@ export const getMessagesByApplication = async (
   next: NextFunction
 ) => {
   try {
-    // Retrieve messages by application ID
     const messages = await MessageService.getMessagesByApplication(
       Number(req.params.app)
     );
     res.json(messages);
   } catch (error) {
-    // Log and pass the error to the error handler middleware
-    console.error('Failed to retrieve messages by application:', error);
+    console.log(error);
     next(error);
   }
 };
 
 /**
- * Handles GET requests to retrieve messages by sender ID.
- * 
- * @param {Request} req - The request object, expects a sender ID in the URL parameter.
- * @param {Response} res - The response object used to send back the fetched data.
- * @param {NextFunction} next - The next middleware function in the stack.
+ * Get messages by sender id
+ * @param req 
+ * @param res 
+ * @param next 
  */
 export const getMessagesBySenderId = async (
-  // Retrieve messages by sender ID
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const messages = await MessageService.getMessagesBySenderId(
-      // Retrieve messages by sender ID
       Number(req.params.sID)
     );
     res.json(messages);
   } catch (error) {
-    // Log and pass the error to the error handler middleware
-    console.error('Failed to retrieve messages by sender ID:', error);
+    console.log(error);
     next(error);
   }
 };
 
 /**
- * Handles GET requests to retrieve messages by receiver ID.
- * 
- * @param {Request} req - The request object, expects a receiver ID in the URL parameter.
- * @param {Response} res - The response object used to send back the fetched data.
- * @param {NextFunction} next - The next middleware function in the stack.
+ * Get messages by receiver id
+ * @param req 
+ * @param res 
+ * @param next 
  */
 export const getMessagesByReceiverId = async (
   req: Request,
@@ -71,52 +63,44 @@ export const getMessagesByReceiverId = async (
     );
     res.json(messages);
   } catch (error) {
-    console.error('Failed to retrieve messages by receiver ID:', error);
+    console.log(error);
     next(error);
   }
 };
 
 /**
- * Handles POST requests to mark a specific message as read.
- * 
- * @param {Request} req - The request object, expects a message ID in the URL parameter.
- * @param {Response} res - The response object used to return the result.
- * @returns {Response} Returns a status 200 with success message or 404 if message not found.
+ * Mark message as read by message id
+ * @param req 
+ * @param res 
+ * @returns 
  */
 export const markMessageAsRead = async (req: Request, res: Response) => {
   try {
-    // Mark message as read
-    const success = await MessageService.markMessageAsRead(
+    const exists = await MessageService.markMessageAsRead(
       Number(req.params.messageID)
     );
-    if (!success) {
+    if (!exists) {
       return res.status(404).json({ message: 'Message not found' });
     }
-    // Return success message
     return res.status(200).json({ message: 'Marked message as read' });
   } catch (error) {
-    // Log and return an error message
-    console.error('Failed to mark message as read:', error);
+    console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 /**
- * Handles POST requests to add a new message.
- * 
- * @param {Request} req - The request object, expects message details in the body (senderId, receiverId, content, applicationId).
- * @param {Response} res - The response object used to return the newly created message.
- * @param {NextFunction} next - The next middleware function in the stack.
- * @returns {Response} Returns a status 201 with the newly created message or an error message.
+ * add Message
+ * @param req 
+ * @param res 
+ * @param next 
  */
 export const addMessage = async (
-  // Add a new message
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Extract message details from the request body
     const { senderId, receiverId, content, applicationId } = req.body;
     const newMessage = await MessageService.addMessage(
       senderId,
@@ -126,9 +110,7 @@ export const addMessage = async (
     );
     res.status(201).json(newMessage);
   } catch (error) {
-    // Log and pass the error to the error handler middleware
-    console.error('Error in controller while adding message:', error);
+    console.error('Error in controller while adding message', error);
     next(error);
   }
 };
-
